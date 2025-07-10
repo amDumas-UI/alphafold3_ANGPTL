@@ -1,16 +1,40 @@
-#### AUTHOR: ALEXANDER DUMAS
-#### LAST UPDATED: 05/30/25
-#### MOST RECENT STATUS: BEING WORKED ON
+"""
+heterotrimer_alphafold_submitter_playwright.py
 
-#### NOTES:
-# RIGHT NOW THIS IS SET FOR A MAC, SEE CONFIGURATION SECTION TO ALTER FOR WINDOWS. IF CHANGED TO WINDOWS CONFIGURATION, CHANGE BACK TO MAC WHEN DONE. 
-# I HAVE YET TO TRY IF WE CAN RUN THIS ON MULTIPLE MACHINES AT THE SAME TIME TO SPEED UP PROGRESS. AGAIN I DONT KNOW IF THIS WILL WORK BUT THE CHANGES BELOW SHOULD HELP IT WORK.
-# IF RUNNING ON MULTIPLE MACHINES MAKE SURE LOGGING IN WITH DIFFERENT GOOGLE ACCOUNTS (HAVE DIFFERENT SESSION_FILES PER USER) / NOT USE THE SAME RESULTS_DIR / ONE USER ON WINDOWS AND THE OTHER ON MAC SO THE USER_DATA_DIR IS DIFFERENT PER USER / ALSO USE INDEPENDENT COMBINATION_FILE PER USER
-# WOULD BE BEST IF THE SECOND USER COPIES ALL NEEDED FILES TO THEIR SECTION OF THE RDSS DRIVE AS TO BOTH NOT BE PULLING FROM A_DUMAS
+Author: Alexander Dumas  
+Date: 2025-07-09  
+
+Purpose:
+    Automates the submission of heterotrimeric protein combinations to AlphaFoldServer.com using Playwright.
+    The script reads a list of protein combinations (with copy numbers), automatically fills in the form,
+    waits for the model to finish, and downloads the resulting prediction files (.zip). Output files are
+    renamed for clarity and unzipped into organized folders.
+
+Inputs:
+    - A combination file listing the protein FASTA file names and copy numbers (e.g., h_A3_mature.txt:2,...)
+    - Individual FASTA files in a specified sequence directory
+
+Outputs:
+    - .zip files downloaded from AlphaFold server
+    - Unzipped result folders stored in a structured output directory
+
+Dependencies:
+    - Playwright (Python API)
+    - Google login session (handled by first-time setup)
+    - FASTA files containing only valid amino acid sequences
+
+Usage:
+    $ python heterotrimer_alphafold_submitter_playwright.py
+
+Notes:
+    - This script is configured for macOS by default. Adjust paths and settings if running on Windows.
+    - Requires a one-time login to Google via browser to initiate a session.
+    - Supports multiple model submissions and tracks progress per combination.
+"""
 
 
 # --------- REMINDER THIS IS SET FOR HETEROTRIMER TESTING. SEE OTHER SCRIPT FOR HOMOTRIMER SUBMISSIONS ---------
-
+# ---- CONFIGURATION ----
 import os
 import time
 import shutil
@@ -26,7 +50,6 @@ from playwright.sync_api import TimeoutError
 from playwright.sync_api import sync_playwright
 from pathlib import Path
 
-#---- CONFIGURE ----
 SEQUENCE_DIR = "sequences"
 DOWNLOAD_DIR = Path.home() / "Downloads" # CHANGE WHERE THE RESULTS ARE INITIALLY DOWNLOADED HERE
 RESULTS_DIR = os.path.join(os.getcwd(), "alphafold_results/heterotrimer/")	# CHANGE WHERE THE RESULTS WILL BE MOVED TO HERE
@@ -35,13 +58,23 @@ ALPHAFOLD_URL = "https://alphafoldserver.com/"
 
 # THIS IS MAC SPECIFIC. FOR WINDOWS INPUT (USER_DATA_DIR = os.path.expandvars(r"%APPDATA%\Playwright\alphafold_profile"))
 USER_DATA_DIR = os.path.expanduser("~/Library/Applications Support/Playwright/alphafold_profile")
-#== MAKE SURE TO CHANGE BACK TO MAC SETTING BEFORE EXITING, THANK YOU ==
+
+#-- MAKE SURE TO CHANGE BACK TO MAC SETTING BEFORE EXITING, THANK YOU --
 
 SESSION_FILE = "google_state.json"
 os.makedirs(DOWNLOAD_DIR, exist_ok=True)
 
-#---- READ SEQUENCES ----
 def read_sequence(filename):
+	"""
+	Reads a FASTA file and returns the cleaned amino acid sequence.
+
+	Args:
+		filename (str): Path to the FASTA file containing the protein sequence.
+
+	Returns:
+		str: Cleaned amino acid sequence (uppercase, with invalid characters removed).
+	"""
+
 	path = os.path.join(SEQUENCE_DIR, filename)
 	print(f"Looking for file at: {path}")
 	if not os.path.exists(path):
@@ -56,11 +89,17 @@ def read_sequence(filename):
 	cleaned = "".join([aa for aa in sequence if aa in valid_aa])
 	return cleaned
 
-# CLEAN UP THE FASTA SEQUENCES TO YIELD STRICT AMINO ACID SEQUENCE
 	
-	
-# ---- EXPAND THE COMBINATIONS ----
 def expand_combo(combo_line):  # USE THE COMBINATION NAME TO SAY HOW MANY OLIGOMERS EXIST OF THE PROTEIN
+	"""
+	Parses a line from the combination file (ht_combinations.txt) and expands it into a list of (filename, count) tuples.
+
+	Args:
+		combo_line (str): A string from the combination file (e.g., "h_A3_mature.txt:2,h_A5_mature.txtx1").
+
+	Returns:
+		expanded (list of tuples): List of (filename, int) pairs indicating the sequence file and its copy number.
+	"""
 	items = combo_line.strip().split(",")
 	expanded = []
 	for item in items:
@@ -73,8 +112,19 @@ def expand_combo(combo_line):  # USE THE COMBINATION NAME TO SAY HOW MANY OLIGOM
 
 # USE THE NAME OF THE COMBINATION THAT ENDS WITH ":X" TO DESIGNATE HOW MANY OLIGOMERS. THIS FUNCTION SEPARATES h_A3_mature.txt:3 into h_A3_mature.txt, 3 TO SPECIFY HOW MANY ENTITIES SHOULD BE ENTERED INTO ALPHAFOLD
 
-#---- SUBMIT SEQUENCES ----
+
 def submit_sequences(page, combo,result_index):
+	"""
+	Submits a protein combination to AlphaFoldServer.com using Playwright.
+
+	Args:
+		page (playwright.sync_api.Page): The Playwright page object.
+		combo (list): List of (filename, count) pairs.
+		result_index (int): Index of the current result used for naming and logging.
+
+	Returns:
+		None
+	"""
 	page.goto(ALPHAFOLD_URL)
 
 	# ADD ENTITIES AS NEEDED 
@@ -149,10 +199,21 @@ def submit_sequences(page, combo,result_index):
 	else:
 		print("Download skipped due to timeout.")
 
-#---- WAIT FOR COMPLETION OF THE JOB ----
-# CAN SET A SHORTER OR LONGER WAIT TIME HERE
-# ALLOW THE USER TO HIT ENTER IF THE JOB IS DONE BEFORE THE ALLOTED TIME
+# -- CAN SET A SHORTER OR LONGER WAIT TIME HERE --
 def wait_for_completion(page, combo, timestamp, wait_before_click_minutes=40):
+	"""
+	Waits for a job to complete on AlphaFoldServer.com and downloads the resulting model.
+
+	Args:
+		page (playwright.sync_api.Page): The Playwright page object.
+		combo (list): The list of (filename, count) pairs submitted.
+		timestamp (str): Timestamp used for identifying the correct result card.
+		wait_before_click_minutes (int): Max wait time before forcing result check.
+
+	Returns:
+		bool: True if download succeeded, False otherwise.
+	"""
+	
 	wait_seconds = wait_before_click_minutes * 60
 	check_interval = 30 
 	elapsed = 0
