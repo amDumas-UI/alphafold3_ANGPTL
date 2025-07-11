@@ -16,40 +16,7 @@ Key features include:
 ---
 
 ## Repository structure
-.
-├── combinations/
-│   ├── ht_combinations.txt            # Heterotrimer combinations to be modeled
-│   └── combinations.txt               # Homotrimer/lipase combinations to be modeled
-│
-├── scripts/
-│   ├── slphafold_submitter.py         # Submission pipeline for single-lipase models
-│   |── heterotrimer_submitter.py      # Submission pipeline for heterotrimeric models
-│   ├── batch_interface.py             # Extracts interface residues (homotrimers)
-│   ├── ht_batch_interface.py          # Extracts interface residues (heterotrimers)
-│   ├── full_trimer_interaction.py     # A/B chains interacting with chain C (barplots)
-│   ├── lipase_pocket.py               # Lipase (chain D) interacting with A/B/C (barplots)
-│   ├── lipase_interactions.py         # Alternative method to extract D-chain residues
-│   ├── spatial_proximity.py           # Jaccard similarity between models/cutoffs (to determine proper surface area cutoff in ASA calculations
-│   └── interfaceResidues.py           # ASA-based interface residue detection (PyMOL script)
-│
-├── interfaces/                        # Saved interface .pdb files extracted from models
-│   └── [heterotrimer]                 # Organized by all ANGPTL heterotrimer combinations tested
-|        └── [lipase folders]          # Organized by combination/cutoff/lipase
-|    └── [homotrimer]
-|        └── [lipase folders]          # Organized by combination/cutoff/lipase
-│
-├── plots/                             # PNG barplots, heatmaps, Jaccard curves
-│   └── [analysis condition folders]   # Matched to interface folders
-│
-├── alphafold_results/                 # Saved .zip archives with .cif prediction models from AlphaFold
-│   └── [heterotrimer]                 # Organized by all ANGPTL heterotrimer combinations tested
-    └── [homotrimer]                   # Organized by all ANGPTL homotrimer combinations tested
-│
-|
-├── sequences/                         # list of .txt files containing fasta sequences for ANGPTL and lipase proteins
-|
-├── README.md                          # This file
-
+<pre> . ├── combinations/ │ ├── ht_combinations.txt # Heterotrimer combinations to be modeled │ └── combinations.txt # Homotrimer/lipase combinations to be modeled │ ├── scripts/ │ ├── slphafold_submitter.py # Submission pipeline for single-lipase models │ ├── heterotrimer_submitter.py # Submission pipeline for heterotrimer models │ ├── batch_interface.py # Extracts interface residues (homotrimers) │ ├── ht_batch_interface.py # Extracts interface residues (heterotrimers) │ ├── full_trimer_interaction.py # A/B chains interacting with chain C (barplots) │ ├── lipase_pocket.py # Lipase (chain D) interacting with A/B/C (barplots) │ ├── lipase_interactions.py # Alternative method to extract D-chain residues │ ├── spatial_proximity.py # Jaccard similarity between models/cutoffs │ └── interfaceResidues.py # ASA-based interface detection (PyMOL script) │ ├── interfaces/ # Saved interface .pdb files extracted from models │ ├── heterotrimer/ # ANGPTL heterotrimer results │ │ └── [lipase folders]/ # Organized by combination/cutoff/lipase │ └── homotrimer/ # ANGPTL homotrimer results │ └── [lipase folders]/ # Organized by combination/cutoff/lipase │ ├── plots/ # Barplots, heatmaps, Jaccard curves │ └── [analysis condition folders]/ # Matches interface folders │ ├── alphafold_results/ # .zip archives from AlphaFold3 predictions │ ├── heterotrimer/ # All ANGPTL heterotrimer combinations tested │ └── homotrimer/ # All ANGPTL homotrimer combinations tested │ ├── sequences/ # .txt FASTA files for ANGPTLs and lipases │ └── README.md # This file </pre>
 ---
 
 ##Purpose
