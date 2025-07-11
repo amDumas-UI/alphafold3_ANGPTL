@@ -16,7 +16,42 @@ Key features include:
 ---
 
 ## Repository structure
-<pre><code> ``` . ├── combinations/ │ ├── ht_combinations.txt # Heterotrimer combinations to be modeled │ └── combinations.txt # Homotrimer/lipase combinations to be modeled │ ├── scripts/ │ ├── slphafold_submitter.py # AlphaFold submission (single-lipase) │ ├── heterotrimer_submitter.py # AlphaFold submission (heterotrimer) │ ├── batch_interface.py # Extracts interface residues (homotrimers) │ ├── ht_batch_interface.py # Extracts interface residues (heterotrimers) │ ├── full_trimer_interaction.py # Barplots: A/B vs C chains │ ├── lipase_pocket.py # Barplots: Lipase chain D interaction │ ├── lipase_interactions.py # Alternate lipase interaction extraction │ ├── spatial_proximity.py # Jaccard similarity comparisons │ └── interfaceResidues.py # PyMOL ASA interface script │ ├── interfaces/ # Interface PDBs from models │ ├── heterotrimer/ │ │ └── [lipase folders]/ # By combination/cutoff/lipase │ └── homotrimer/ │ └── [lipase folders]/ # By combination/cutoff/lipase │ ├── plots/ # Plots: barplots, heatmaps, Jaccard curves │ └── [matching to interface folders] │ ├── alphafold_results/ # .zip results from AlphaFold3 │ ├── heterotrimer/ # Heterotrimer predictions │ └── homotrimer/ # Homotrimer predictions │ ├── sequences/ # FASTA files (.txt) for ANGPTL and lipases │ └── README.md # This file ``` </code></pre>
+ 
+    ``` 
+    . 
+    ├── combinations/ 
+    │     ├── ht_combinations.txt              # Heterotrimer combinations to be modeled 
+    │     └── combinations.txt                 # Homotrimer/lipase combinations to be modeled 
+    |
+    ├── scripts/ 
+    │     ├── slphafold_submitter.py           # AlphaFold submission (single-lipase) 
+    │     ├── heterotrimer_submitter.py        # AlphaFold submission (heterotrimer) 
+    │     ├── batch_interface.py               # Extracts interface residues (homotrimers) 
+    │     ├── ht_batch_interface.py            # Extracts interface residues (heterotrimers) 
+    │     ├── full_trimer_interaction.py       # Barplots: A/B vs C chains 
+    │     ├── lipase_pocket.py                 # Barplots: Lipase chain D interaction 
+    │     ├── lipase_interactions.py           # Alternate lipase interaction extraction 
+    │     ├── spatial_proximity.py             # Jaccard similarity comparisons 
+    │         └── interfaceResidues.py         # PyMOL ASA interface script 
+    │ 
+    ├── interfaces/                            # Interface PDBs from models 
+    │     ├── heterotrimer/ 
+    │     │    └── [lipase folders]/           # By combination/cutoff/lipase 
+    │     └── homotrimer/ 
+    │          └── [lipase folders]/           # By combination/cutoff/lipase 
+    │ 
+    ├── plots/                                 # Plots: barplots, heatmaps, Jaccard curves 
+    │     └── [matching to interface folders] 
+    │ 
+    ├── alphafold_results/                     # .zip results from AlphaFold3 
+    │     ├── heterotrimer/                    # Heterotrimer predictions 
+    │     └── homotrimer/                      # Homotrimer predictions 
+    │ 
+    ├── sequences/                             # FASTA files (.txt) for ANGPTL and lipases 
+    │ 
+    └── README.md                              # This file 
+    ``` 
+
 ---
 
 ##Purpose
