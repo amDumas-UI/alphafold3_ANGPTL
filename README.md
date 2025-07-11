@@ -52,7 +52,7 @@ Key features include:
 
 ---
 
-## Purpose
+##Purpose
 This toolkit analyzes residue-level interaction between ANGPTL trimers and lipase proteins including:
 - Chain-specific interaction mapping (e.g., chain A/B interacting with chain C)
 - Lipase pocket analysis (residues in chain D)
@@ -61,7 +61,7 @@ This toolkit analyzes residue-level interaction between ANGPTL trimers and lipas
 
 ---
 
-## Features
+##Features
 
 - **Barpolots** of intereface residue occurrence across multiple AlphaFold models
 - **Pocket residue tracking** based on lipase family homology
@@ -71,31 +71,31 @@ This toolkit analyzes residue-level interaction between ANGPTL trimers and lipas
 
 ---
 
-## Usage
+##Usage
 
-### 1. Submit Sequences to AlphaFold (While not required, this was used to automate submissions and be more efficient)
+###1. Submit Sequences to AlphaFold (While not required, this was used to automate submissions and be more efficient)
 
 '''bash
-# Heterotrimeric complex
+####Heterotrimeric complex
 python heterotrimer_alphafold_submitter_playwright.py -- input_fasta path/to/sequence/.txt -- output_cif alphafold_results/heterotrimer/.cif
 
-# Homotrimeric complex
+####Homotrimeric complex
 python alphafold_submitter_playwright.py -- input_fasta path/to/sequence/.txt -- output_cif alphafold_results/homotrimer/
 '''
 
-### 2. Extract Interacting Residues based on ASA calculation
+###2. Extract Interacting Residues based on ASA calculation
 
 '''bash
-# Heterotrimer
+####Heterotrimer
 python ht_batch_interface.py -- input_dir alphafold_results/heterotrimer/combination/  --output_pdb interface/heterotrimer/respective combination/respective lipase/.pdb
 
-# Homotrimer
+####Homotrimer
 python batch_interface.py -- input_dir alphafold_results/homotrimer/combination/ -- output_pdb interface/homotrimer/respective combination/respective lipase/.pdb
 '''
 
-### 2. Run Interface Analysis
+###2. Run Interface Analysis
 
-#### For chains A/B vs C:
+####For chains A/B vs C:
 '''bash
 python full_trimer_interactions.py -- input_dir alphafold_results/____trimer/ -- output_png plots/______trimer/respective combination/.png
 '''
@@ -105,12 +105,12 @@ python full_trimer_interactions.py -- input_dir alphafold_results/____trimer/ --
 python lipase_interactions.py -- input_cif_dir input_pdb_dir Path/to/parent/directory/for/cif_predictions Path/to/parent/directory/for/pdb_interface_predictions -- output_png plots/______trimer/respective combination/.png
 '''
 
-#### For lipase pocket residues (chain D):
+####For lipase pocket residues (chain D):
 '''bash
 python lipase_pocket.py -- input_cif_dir input_pdb_dir Path/to/parent/directory/for/cif_predictions Path/to/parent/directory/for/pdb_interface_predictions -- output_png plots/______trimer/respective combination/.png
 '''
 
-## Dependencies
+##Dependencies
 - PyMOL
 - Biopython
 - matplotlib
