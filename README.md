@@ -16,16 +16,48 @@ Key features include:
 ---
 
 ## Repository structure
+.
+├── combinations/
+│   ├── ht_combinations.txt            # Heterotrimer combinations to be modeled
+│   └── combinations.txt               # Homotrimer/lipase combinations to be modeled
+│
+├── scripts/
+│   ├── slphafold_submitter.py         # Submission pipeline for single-lipase models
+│   |── heterotrimer_submitter.py      # Submission pipeline for heterotrimeric models
+│   ├── batch_interface.py             # Extracts interface residues (homotrimers)
+│   ├── ht_batch_interface.py          # Extracts interface residues (heterotrimers)
+│   ├── full_trimer_interaction.py     # A/B chains interacting with chain C (barplots)
+│   ├── lipase_pocket.py               # Lipase (chain D) interacting with A/B/C (barplots)
+│   ├── lipase_interactions.py         # Alternative method to extract D-chain residues
+│   ├── spatial_proximity.py           # Jaccard similarity between models/cutoffs (to determine proper surface area cutoff in ASA calculations
+│   └── interfaceResidues.py           # ASA-based interface residue detection (PyMOL script)
+│
+├── interfaces/                        # Saved interface .pdb files extracted from models
+│   └── [heterotrimer]                 # Organized by all ANGPTL heterotrimer combinations tested
+|        └── [lipase folders]          # Organized by combination/cutoff/lipase
+|    └── [homotrimer]
+|        └── [lipase folders]          # Organized by combination/cutoff/lipase
+│
+├── plots/                             # PNG barplots, heatmaps, Jaccard curves
+│   └── [analysis condition folders]   # Matched to interface folders
+│
+├── alphafold_results/                 # Saved .zip archives with .cif prediction models from AlphaFold
+│   └── [heterotrimer]                 # Organized by all ANGPTL heterotrimer combinations tested
+    └── [homotrimer]                   # Organized by all ANGPTL homotrimer combinations tested
+│
+|
+├── sequences/                         # list of .txt files containing fasta sequences for ANGPTL and lipase proteins
+|
+├── README.md                          # This file
 
 ---
 
 ## Purpose
-This toolkit analyzes interaction interfaces predicted by AlphaFold, focusing on:
-
+This toolkit analyzes residue-level interaction between ANGPTL trimers and lipase proteins including:
 - Chain-specific interaction mapping (e.g., chain A/B interacting with chain C)
 - Lipase pocket analysis (residues in chain D)
-- Prediction stability via Jaccard similarity
-- Comparative modeling for different trimeric configurations
+- Assessing prediction stability via Jaccard similarity
+- Comparative modeling for different trimeric configurations (homotrimers vs heterotrimer)
 
 ---
 
@@ -41,23 +73,51 @@ This toolkit analyzes interaction interfaces predicted by AlphaFold, focusing on
 
 ## Usage
 
-### 1. Submit Sequences to AlphaFold
+### 1. Submit Sequences to AlphaFold (While not required, this was used to automate submissions and be more efficient)
 
 '''bash
-python heterotrimer_alphafold_submitter_playwright.py -- input_fasta your_input.fasta --output_dir alphafold_results/
+# Heterotrimeric complex
+python heterotrimer_alphafold_submitter_playwright.py -- input_fasta path/to/sequence/.txt -- output_cif alphafold_results/heterotrimer/.cif
+
+# Homotrimeric complex
+python alphafold_submitter_playwright.py -- input_fasta path/to/sequence/.txt -- output_cif alphafold_results/homotrimer/
+'''
+
+### 2. Extract Interacting Residues based on ASA calculation
+
+'''bash
+# Heterotrimer
+python ht_batch_interface.py -- input_dir alphafold_results/heterotrimer/combination/  --output_pdb interface/heterotrimer/respective combination/respective lipase/.pdb
+
+# Homotrimer
+python batch_interface.py -- input_dir alphafold_results/homotrimer/combination/ -- output_pdb interface/homotrimer/respective combination/respective lipase/.pdb
 '''
 
 ### 2. Run Interface Analysis
-#### For heterotrimer chains A/B vs C:
+
+#### For chains A/B vs C:
 '''bash
-python full_trimer_interactions.py
+python full_trimer_interactions.py -- input_dir alphafold_results/____trimer/ -- output_png plots/______trimer/respective combination/.png
 '''
 
 ####For heterotrimer chains A/B/C vs Lipase chain D
 '''bash
-python lipase_interactions.py
+python lipase_interactions.py -- input_cif_dir input_pdb_dir Path/to/parent/directory/for/cif_predictions Path/to/parent/directory/for/pdb_interface_predictions -- output_png plots/______trimer/respective combination/.png
 '''
+
 #### For lipase pocket residues (chain D):
 '''bash
-python lipase_pocket.py
+python lipase_pocket.py -- input_cif_dir input_pdb_dir Path/to/parent/directory/for/cif_predictions Path/to/parent/directory/for/pdb_interface_predictions -- output_png plots/______trimer/respective combination/.png
 '''
+
+## Dependencies
+- PyMOL
+- Biopython
+- matplotlib
+- pandas
+- seaborn
+- tqdm (for progress bars)
+- Python >= 3.8
+
+- install via conda
+    - conda install -c conda-forge biopython pymol matplotlib pandas seaborn tqdm
