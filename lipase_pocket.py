@@ -421,7 +421,7 @@ def main():
 		ax.set_xticklabels(plot_df["ResLabel"], rotation=90, ha='right', fontsize=3)
 		for tick, is_pocket in zip(ax.get_xticklabels(), plot_df["IsPocket"]):
 			tick.set_color(SHARED_COLOR if is_pocket else "black")
-		ax.set_title(f"{lipase_name} Interface Residues", fontsize=12)	
+		ax.set_title(f"{lipase_name} Interface Residues", fontsize=20)	
 		ax.set_ylabel("Percent of Models Interacting")
 		ax.set_xlabel("Residue")
 	
