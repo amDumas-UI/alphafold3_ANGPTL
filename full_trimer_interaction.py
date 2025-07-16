@@ -24,7 +24,7 @@ Dependencies:
     - tqdm
 
 Run:
-    python full_trimer_interaction.py
+    $ python full_trimer_interaction.py
 
 Notes:
     Residues are labeled as "Chain:RESNAME_RESNUM" (e.g., A:ARG_24) and sorted by chain and index.
