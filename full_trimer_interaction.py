@@ -221,7 +221,7 @@ def process_lipase_data(lipase_path, lipase_name):
 	
 	df = pd.DataFrame(index=ref_residues)
 
-	for model, residues in model_res_map.items():
+	for model, residues in residue_matrix.items():
 		df[model] = [1 if res in residues else 0 for res in ref_residues]
 	
 	if DEBUG_EXTRACTION:
