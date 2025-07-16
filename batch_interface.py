@@ -3,26 +3,29 @@ batch_interface.py
 
 Author: Alexander Dumas
 Date: 2025-06-13
-Purpose: This script processes AlphaFold-predicted structures of homotrimers and lipases.
-It extracts .cif files from zip archives, detects interacting residues between homotrimer chains and a lipase,
-and saves interface residues as new PDB files using PyMOL and a custom interfaceResidues function.
+
+Purpose: 
+	This script processes AlphaFold-predicted structures of homotrimers and lipases. It extracts .cif files from zip archives, 
+ 	detects interacting residues between homotrimer chains and a lipase, and saves interface residues as new PDB files using PyMOL 
+  	and a custom interfaceResidues function.
 
 Dependencies:
-- PyMOL with Python API
-- InterfaceResidues.py in Python path
+	- PyMOL with Python API
+	- InterfaceResidues.py in Python path
 
 Inputs:
-- Directory containing AlphaFold output zip files
-- Sequences assumed to have consistent chain IDs per model
+	- Directory containing AlphaFold output zip files
+	- Sequences assumed to have consistent chain IDs per model
 
 Outputs:
-- Interface PDB files saved in `output_dir`
+	- Interface PDB files saved in `output_dir`
 
 Usage:
-Run inside a PyMOL-enabled Python environment.
+	$ python batch_interface.py
 
 Note:
-This script is designed for homotrimer-lipase systems. For ANGPTL heterotrimers, see the alternative script (ht_batch_interface.py).
+	This script is designed for homotrimer-lipase systems as it will determine the homotrimer based on sequence similarity. 
+ 	For ANGPTL heterotrimers, see the alternative script (ht_batch_interface.py).
 """
 
 import os 
