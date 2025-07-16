@@ -23,10 +23,12 @@ Dependencies:
     - matplotlib, pandas
 
 Run:
-    python ht_batch_interface.py --input_dir path/to/folders --output_dir path/to/save
+    $ python ht_batch_interface.py 
 
 Note:
-This script is designed for heterotrimer-lipase systems due to hardcoded chain identifiers within the script. For ANGPTL homotrimers, see the alternative script (batch_interface.py).
+This script is designed for heterotrimer-lipase systems due to hardcoded chain identifiers within the script. 
+This script expects chains A-C to be the ANGPTL heterotrimer and chain D to be the lipase. Alteration of this is accepted with the script.
+For ANGPTL homotrimers, see the alternative script (batch_interface.py) which identifies trimer chains based on sequence similarity.
 """
 
 import os 
