@@ -422,7 +422,9 @@ def main():
 		for tick, is_pocket in zip(ax.get_xticklabels(), plot_df["IsPocket"]):
 			tick.set_color(SHARED_COLOR if is_pocket else "black")
 		ax.set_title(f"{lipase_name} Interface Residues", fontsize=20)	
-		ax.set_ylabel("Percent of Models Interacting")
+		ax.set_ylabel("Percent of Models Interacting", fontsize=20)
+		ax.set_ylim(0,100)
+		ax.tick_params(axis='y', labelsize=15)
 		ax.set_xlabel("Residue")
 	
 	handles = [plt.Rectangle((0,0),1,1, color=chain_color_map[ch]) for ch in EXPECTED_CHAINS]
