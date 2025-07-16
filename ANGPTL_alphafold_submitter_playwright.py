@@ -1,5 +1,5 @@
 """
-heterotrimer_alphafold_submitter_playwright.py
+ANGPTL_alphafold_submitter_playwright.py
 
 Author: Alexander Dumas  
 Date: 2025-07-09  
@@ -24,7 +24,7 @@ Dependencies:
     - FASTA files containing only valid amino acid sequences
 
 Usage:
-    $ python heterotrimer_alphafold_submitter_playwright.py
+    $ python ANGPTL_alphafold_submitter_playwright.py
 
 Notes:
     - This script is configured for macOS by default. Adjust paths and settings if running on Windows.
