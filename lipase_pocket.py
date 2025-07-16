@@ -26,7 +26,7 @@ Dependencies:
     - tqdm (optional, for progress bars)
 
 Usage:
-    python lipase_pocket.py
+    $ python lipase_pocket.py
 
 Note:
     - The script assumes consistent chain labeling (chains A–C for heterotrimer, D for lipase).
