@@ -24,7 +24,7 @@ Dependencies:
     - matplotlib, seaborn, pandas
     - tqdm (for progress visualization)
 
-Run:
+Usage:
     $ python full_trimer_interaction.py
 
 Notes:
