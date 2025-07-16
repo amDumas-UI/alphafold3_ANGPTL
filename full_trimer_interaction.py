@@ -348,8 +348,10 @@ def main():
 		ax.set_xticklabels(plot_df["ResLabel"], rotation=90, ha='right', fontsize=3)
 		for tick, is_shared in zip(ax.get_xticklabels(), highlight_flags):
 			tick.set_color(SHARED_COLOR if is_shared else "black")
-		ax.set_title(f"{lipase_name}: A+B vs C Interface Residues", fontsize=30)	
-		ax.set_ylabel("Percent of Models Interacting")
+		ax.set_title(f"{lipase_name}: A+B vs C Interface Residues", fontsize=25)	
+		ax.set_ylabel("Percent of Models Interacting", fontsize=20)
+		ax.setylim(0,100)
+		ax.tick_params(axis='y', labelsize=15)
 		ax.set_xlabel("Residue")
 	
 	handles = [plt.Rectangle((0,0),1,1, color=chain_color_map[ch]) for ch in EXPECTED_CHAINS]
