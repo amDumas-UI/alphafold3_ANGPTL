@@ -21,6 +21,9 @@ Dependencies:
     - Biopython
     - matplotlib
     - seaborn
+
+Usage:
+	$ python spatial_proximity.py
 """
 
 # ---- CONFIGURATION ----
