@@ -5,7 +5,7 @@ Author: Alexander Dumas
 Date: 2025-07-09  
 
 Purpose:
-    Automates the submission of heterotrimeric protein combinations to AlphaFoldServer.com using Playwright.
+    Automates the submission of heterotrimeric or homotrimeric ANGPTL protein combinations to AlphaFoldServer.com using Playwright.
     The script reads a list of protein combinations (with copy numbers), automatically fills in the form,
     waits for the model to finish, and downloads the resulting prediction files (.zip). Output files are
     renamed for clarity and unzipped into organized folders.
@@ -33,7 +33,6 @@ Notes:
 """
 
 
-# --------- REMINDER THIS IS SET FOR HETEROTRIMER TESTING. SEE OTHER SCRIPT FOR HOMOTRIMER SUBMISSIONS ---------
 # ---- CONFIGURATION ----
 import os
 import time
