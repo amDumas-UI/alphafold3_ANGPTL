@@ -296,8 +296,12 @@ def main():
 		global_model_res_map[lipase_name] = residues_seen
 	
 	# FIND RESIDUE PRESENT IN 5/5 LIPASES
-	#shared_across_lipase = set.intersection(*global_model_res_map.values())
 	required_lipases = 5
+
+	print(f"[DEBUG] using TRIMER_THRESHOLD = {TRIMER_THRESHOLD} --> requires count >= {total_models / TRIMER_THRESHOLD}")
+	print(f"[DEBUG] Required lipase presence: {required_lipases}")
+	print(f"[DEBUG] Total unique residues tracked for most recent lipase: {len(global_residue_counts)}")
+	print(f"[DEBUG] Max lipase_presence: {max(lipase_presence.values())}")
 
 	# APPLY 1/3 MODEL CUTOFF
 	highlight_residues = {
