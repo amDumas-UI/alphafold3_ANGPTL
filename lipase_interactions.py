@@ -25,13 +25,13 @@ Dependencies:
     - tqdm (for progress visualization)
 
 Run:
-    python full_trimer_interaction.py
+    $ python full_trimer_interaction.py
 
 Notes:
     - This script is tailored to systems with fixed chain conventions:
         - Chains A–C: Heterotrimer
         - Chain D: Lipase
-    - For reversed interaction direction (e.g., chain D interacting with A/B/C), see the alternative script.
+    - For reversed interaction direction (e.g., chain D interacting with chains A/B/C), see the alternative script.
 	- lipase_pocket.py
 
 """
