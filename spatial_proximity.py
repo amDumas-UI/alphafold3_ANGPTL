@@ -23,7 +23,10 @@ Dependencies:
     - seaborn
 
 Usage:
-	$ python spatial_proximity.py
+    $ python spatial_proximity.py
+
+Notes:
+	This 
 """
 
 # ---- CONFIGURATION ----
