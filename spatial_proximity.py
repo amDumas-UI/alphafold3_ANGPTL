@@ -24,9 +24,6 @@ Dependencies:
 
 Usage:
     $ python spatial_proximity.py
-
-Notes:
-	This 
 """
 
 # ---- CONFIGURATION ----
