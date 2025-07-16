@@ -24,8 +24,7 @@ Key features include:
     │     └── combinations.txt                 # Homotrimer/lipase combinations to be modeled 
     |
     ├── scripts/ 
-    │     ├── slphafold_submitter.py           # AlphaFold submission (single-lipase) 
-    │     ├── heterotrimer_submitter.py        # AlphaFold submission (heterotrimer) 
+    │     ├── heterotrimer_alphafold_submitter_playwright.py        # AlphaFold submission (heterotrimer) 
     │     ├── batch_interface.py               # Extracts interface residues (homotrimers) 
     │     ├── ht_batch_interface.py            # Extracts interface residues (heterotrimers) 
     │     ├── full_trimer_interaction.py       # Barplots: A/B vs C chains 
