@@ -353,7 +353,7 @@ def main():
 		for tick, is_shared in zip(ax.get_xticklabels(), highlight_flags):
 			tick.set_color(SHARED_COLOR if is_shared else "black")
 		ax.set_title(f"{lipase_name}: A+B vs C Interface Residues", fontsize=25)	
-		ax.set_ylabel("Percent of Models Interacting", fontsize=20)
+		ax.set_ylabel("Percent of Models Interacting", fontsize=14)
 		ax.setylim(0,100)
 		ax.tick_params(axis='y', labelsize=15)
 		ax.set_xlabel("Residue")
