@@ -114,7 +114,7 @@ python lipase_pocket.py -- input_cif_dir input_pdb_dir Path/to/parent/directory/
 python map_consensus_residues.py -- input_lipase_cif_dir input_trimer_cif_dir input_pdb_dir input Path/to/parent/directory/for/lipase_cif/ Path/to/parent/directory/for/trimer_cif/ Path/to/parent/directory/for/pdb_interface_predictions -- output_pse plots/____trimer/respective_combination/.pse
 
 ##Dependencies
-- PyMOL
+- PyMOL (with API access)
 - Biopython
 - matplotlib
 - pandas
