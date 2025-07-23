@@ -4,7 +4,7 @@ map_consensus_residues.py
 Author: Alexander Dumas  
 Last Updated: July 2025
 
-Description:
+Purpose:
 	This script identifies and maps consensus interface residues from predicted lipase–heterotrimer interactions
 	onto representative AlphaFold structures. It highlights residues that appear in more than one-third of 
 	interface models and visualizes them using PyMOL.
@@ -38,7 +38,6 @@ Dependencies:
 Usage:
 	$ python map_consensus_residues.py
 
-    (Ensure working directory contains the correct folder structure for input files.)
 """
 
 #---- CONFIGURATION ----
