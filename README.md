@@ -24,10 +24,11 @@ Key features include:
     │     └── combinations.txt                 # Homotrimer/lipase combinations to be modeled 
     |
     ├── scripts/ 
-    │     ├── heterotrimer_alphafold_submitter_playwright.py        # AlphaFold submission (heterotrimer) 
+    │     ├── ANGPTL_alphafold_submitter_playwright.py        # AlphaFold submission  
     │     ├── batch_interface.py               # Extracts interface residues (homotrimers) 
     │     ├── ht_batch_interface.py            # Extracts interface residues (heterotrimers) 
     │     ├── full_trimer_interaction.py       # Barplots: A/B vs C chains 
+    |     ├── map_consensus_residues.py        # Maps interaction residues back to trimer and lipase structures
     │     ├── lipase_pocket.py                 # Barplots: Lipase chain D interaction 
     │     ├── lipase_interactions.py           # Alternate lipase interaction extraction 
     │     ├── spatial_proximity.py             # Jaccard similarity comparisons 
@@ -39,7 +40,7 @@ Key features include:
     │     └── homotrimer/ 
     │          └── [lipase folders]/           # By combination/cutoff/lipase 
     │ 
-    ├── plots/                                 # Plots: barplots, heatmaps, Jaccard curves 
+    ├── plots/                                 # Plots: barplots, heatmaps, Jaccard curves, PYMOL .pse environments 
     │     └── [matching to interface folders] 
     │ 
     ├── alphafold_results/                     # .zip results from AlphaFold3 
@@ -77,12 +78,10 @@ This toolkit analyzes residue-level interaction between ANGPTL trimers and lipas
 ###1. Submit Sequences to AlphaFold (While not required, this was used to automate submissions and be more efficient)
 
 '''bash
-####Heterotrimeric complex
-python heterotrimer_alphafold_submitter_playwright.py -- input_fasta path/to/sequence/.txt -- output_cif alphafold_results/heterotrimer/.cif
+####Heterotrimeric and Homotrimeric complexes
+python ANGPTL_alphafold_submitter_playwright.py -- input_fasta path/to/sequence/.txt -- output_cif alphafold_results/heterotrimer/.cif
 
-####Homotrimeric complex
-python alphafold_submitter_playwright.py -- input_fasta path/to/sequence/.txt -- output_cif alphafold_results/homotrimer/
-'''
+
 
 ###2. Extract Interacting Residues based on ASA calculation
 
@@ -108,8 +107,11 @@ python lipase_interactions.py -- input_cif_dir input_pdb_dir Path/to/parent/dire
 
 ####For lipase pocket residues (chain D):
 '''bash
-python lipase_pocket.py -- input_cif_dir input_pdb_dir Path/to/parent/directory/for/cif_predictions Path/to/parent/directory/for/pdb_interface_predictions -- output_png plots/______trimer/respective combination/.png
+python lipase_pocket.py -- input_cif_dir input_pdb_dir Path/to/parent/directory/for/cif_predictions Path/to/parent/directory/for/pdb_interface_predictions -- output_png plots/______trimer/respective_combination/.png
 '''
+
+'''bash
+python map_consensus_residues.py -- input_lipase_cif_dir input_trimer_cif_dir input_pdb_dir input Path/to/parent/directory/for/lipase_cif/ Path/to/parent/directory/for/trimer_cif/ Path/to/parent/directory/for/pdb_interface_predictions -- output_pse plots/____trimer/respective_combination/.pse
 
 ##Dependencies
 - PyMOL
