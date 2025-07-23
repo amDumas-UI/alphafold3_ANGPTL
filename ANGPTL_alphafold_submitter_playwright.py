@@ -30,6 +30,8 @@ Notes:
     - This script is configured for macOS by default. Adjust paths and settings if running on Windows.
     - Requires a one-time login to Google via browser to initiate a session.
     - Supports multiple model submissions and tracks progress per combination.
+    - This script requires manual entry of the third combination entry due to playwright's inability to distinguish the third fasta 
+      sequence text box. The sequence will be printed in the terminal for ease.
 """
 
 
