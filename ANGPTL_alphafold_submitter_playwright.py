@@ -32,6 +32,8 @@ Notes:
     - Supports multiple model submissions and tracks progress per combination.
     - This script requires manual entry of the third combination entry due to playwright's inability to distinguish the third fasta 
       sequence text box. The sequence will be printed in the terminal for ease.
+    - For more efficient use of following scripts, inputing the combination in terms of ANGPTL:2, ANGPTL:1, Lipase, will yield the proper 
+      chain order that is hardcoded in the downstream analysis.
 """
 
 
