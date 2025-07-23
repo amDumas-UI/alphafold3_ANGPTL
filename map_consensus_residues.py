@@ -40,7 +40,7 @@ Usage:
 
 """
 
-#---- CONFIGURATION ----
+# ---- CONFIGURATION ----
 
 import pymol
 import os
