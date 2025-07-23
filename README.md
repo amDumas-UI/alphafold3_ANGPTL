@@ -11,6 +11,7 @@ Key features include:
 - Extraction of interacting residues using PyMOL and distance-based filtering.
 - Bar plot generation of residue-level interaction frequencies across multiple models.
 - Highlighting of conserved or catalytic residues across multiple lipases.
+- Highlighting consensus residues onto the trimer and lipase structures in a PYMOL environment.
 - Jaccard similarity calculations to assess prediction consistency.
 
 ---
