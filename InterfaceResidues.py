@@ -1,6 +1,6 @@
 from pymol import cmd, stored
 
-def interfaceResidues(cmpx, cA='c. A', cB='c. B', cutoff=6.0, selName="interface"):
+def interfaceResidues(cmpx, cA='c. A', cB='c. B', cutoff=1.0, selName="interface"):
 	"""
 	interfaceResidues -- finds 'interface' residues between two chains in a complex.
 	
