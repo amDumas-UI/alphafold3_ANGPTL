@@ -4,7 +4,7 @@ map_consensus_residues.py
 Author: Alexander Dumas  
 Last Updated: July 2025
 
-Purpose:
+Description:
 	This script identifies and maps consensus interface residues from predicted lipase–heterotrimer interactions
 	onto representative AlphaFold structures. It highlights residues that appear in more than one-third of 
 	interface models and visualizes them using PyMOL.
@@ -38,9 +38,10 @@ Dependencies:
 Usage:
 	$ python map_consensus_residues.py
 
+    (Ensure working directory contains the correct folder structure for input files.)
 """
 
-# ---- CONFIGURATION ----
+#---- CONFIGURATION ----
 
 import pymol
 import os
@@ -49,11 +50,17 @@ import tempfile
 from collections import Counter, defaultdict
 from pymol import cmd
 
-PDB_DIR = "./interfaces/homotrimer/A4/"
-TRIMER_ZIP_DIR = "./alphafold_results/homotrimer/Trimer_alone/A4/"
+PDB_DIR = "./interfaces/homotrimer/A3/"
+TRIMER_ZIP_DIR = "./alphafold_results/Trimer_alone/A3/"
 LIPASE_ZIP_DIR = "./lipase_predictions/"
-OUTPUT_DIR = "./plots/heterotrimer/A4_A5/"
-THRESHOLD = 1/3 # FRACTION OF MODELS A RESIDUE MUST APPEAR IN TO BE HIGHLIGHTED
+OUTPUT_DIR = "./plots/homotrimer/A3/"
+THRESHOLDS = [
+	(0.9, "red"),	# Highest confidence
+	(0.6, "orange"),
+	(0.3, "yellow"),	# 1/3 of total models. Similar to threshold I have used in the other scripts
+	# < 0.3 = white
+]
+
 os.makedirs(OUTPUT_DIR, exist_ok=True)
 
 
@@ -64,7 +71,7 @@ def extract_interface_residues(pdb_dir):
 	Args:
 		pdb_dir (str): Path to directory containing interface .pdb files.
 	Returns:
-		set[str]: Residue identifiers (e.g., D/123) that meet the threshold.
+		set[str, float]: Residue identifiers and their frequency (0-1) (e.g., D/123) that meet the thresholds.
 	"""
 	model_residue_map = defaultdict(set)
 	for pdb_file in os.listdir(pdb_dir):
@@ -84,10 +91,10 @@ def extract_interface_residues(pdb_dir):
 		all_residues.update(residues)
 
 	num_models = len(model_residue_map)
-	highlight = {res for res, count in all_residues.items() if count > num_models * THRESHOLD}
-	return highlight
-
-
+	residue_frequencies = {
+		res: count / num_models for res, count in all_residues.items()}
+	
+	return residue_frequencies
 
 
 def extract_first_cif(zip_folder):
@@ -132,19 +139,9 @@ def color_and_export(cif_path, highlighted_residues, output_path, chain_filter):
 	cmd.reinitialize()
 	cmd.load(cif_path, "af_model")
 	print(f"[DEBUG] Loaded  model from: {cif_path}")
-
-	if chain_filter == ["A"]:
-		translated_residues = set()
-		for res_id in highlighted_residues:
-			if res_id.startswith("D:"):
-				rest = res_id.split(":", 1)[1]
-				translated_residues.add(f"A:{rest}")
-		highlighted_residues = translated_residues
-		print(f"[DEBUG] Translated D: -> A: for lipase highlighting")
-		
-	# Hide everything, then show cartoon
-	cmd.hide("everything", "af_model")
-	cmd.show("cartoon", "af_model")
+	
+	chains = cmd.get_chains("af_model")
+	print(f"[DEBUG] Chains in model: {chains}")
 
 	# Select chains of interest
 	chain_selection = " + ".join([f"chain {ch}" for ch in chain_filter])
@@ -156,27 +153,36 @@ def color_and_export(cif_path, highlighted_residues, output_path, chain_filter):
 	cmd.delete("af_model")
 
 	# Highlight residues
+	def get_color_for_frequency(freq):
+		for threshold, color in THRESHOLDS:
+			if freq >= threshold:
+				return color
+		return "white" # default fallback
+
 	print(f"[DEBUG] Total residues to highlight on lipase: {len(highlighted_residues)}")
-	print(sorted(highlighted_residues))
-	for res_id in highlighted_residues:
+	
+	print(sorted(list(highlighted_residues.items())[:5]))
+	for res_id, freq in highlighted_residues.items():
 		if res_id.startswith("D:"):
+			color = get_color_for_frequency(freq)
 			chain, rest = res_id.split(":")
 			resn, resi = rest.split("_")
 			translated_chain = "A" # Since using a lipase monomer the chain is now chain A in the lipase only pse
 			selection = f"my_model and chain {translated_chain} and resi {resi} and resn {resn}"
 			cmd.select("residue_sel", selection)
-			cmd.show("sticks", "residue_sel")
-			cmd.color("red", "residue_sel")
+			cmd.show("cartoon", "residue_sel")
+			cmd.color(color, "residue_sel")
 			cmd.delete("residue_sel")
 	
-	for res_id in highlighted_residues:
+	for res_id, freq in highlighted_residues.items():
 		if res_id.startswith(("A:","B:","C:")):
+			color = get_color_for_frequency(freq)
 			chain, rest = res_id.split(":")
 			resn, resi = rest.split("_")
 			selection = f"my_model and chain {chain} and resi {resi} and resn {resn}"
 			cmd.select("residue_sel", selection)
-			cmd.show("sticks", "residue_sel")
-			cmd.color("red", "residue_sel")
+			cmd.show("cartoon", "residue_sel")
+			cmd.color(color, "residue_sel")
 			cmd.delete("residue_sel")
 
 	cmd.save(output_path)
@@ -205,7 +211,7 @@ def main():
 		print(f"\n[PROCESSING] {lipase_folder}")
 
 		consensus_residues = extract_interface_residues(pdb_dir)
-		print(f" -> {len(consensus_residues)} residues found in >1/3 of models")
+		print(f" -> {len(consensus_residues)} residues found within the thresholds")
 
 		lipase_zip_path = os.path.join(LIPASE_ZIP_DIR, lipase_folder)
 		lipase_cif = extract_first_cif(lipase_zip_path)
@@ -216,19 +222,20 @@ def main():
 
 		# Output paths
 		lipase_out = os.path.join(OUTPUT_DIR, f"{lipase_folder}_lipase_only.pse")
-		trimer_out = os.path.join(OUTPUT_DIR, f"{lipase_folder}_heterotrimer_only.pse")
+		trimer_out = os.path.join(OUTPUT_DIR, f"{lipase_folder}_trimer_only.pse")
 
 		# Make lipase-only visualization (Chain D)
-		lipase_residues = [r for r in consensus_residues if r.startswith("D:")]
+		lipase_residues = {res: freq for res, freq in consensus_residues.items() if res.startswith("D:")}
 		print(f"[DEBUG] Residues on chain D (lipase): {len(lipase_residues)}")
 		color_and_export(lipase_cif, lipase_residues, lipase_out, chain_filter=["A"])
 
 		# Make trimer-only visualization (chains A/B/C)
-		trimer_residues = [r for r in consensus_residues if r.startswith(("A:","B:","C:"))]
-		print(f"[DEBUG] Residues on chains A, B, and C (trimer chains): {len(trimer_residues)}")
+		trimer_residues = {res: freq for res, freq in consensus_residues.items() if res.startswith(("A:","B:","C:"))}
+		print(f"[DEBUG] Residues on chains A, B, C (trimer chains): {len(trimer_residues)}")
 		color_and_export(trimer_cif, trimer_residues, trimer_out, chain_filter=["A", "B", "C"])
-
-	print("\n[FINISH] Batch processing complete.")
+	
+	print("\n[FINISH] Batch processesing complete.")
 
 if __name__ == "__main__":
 	main()
+
