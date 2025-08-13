@@ -2,12 +2,12 @@
 ANGPTL_alphafold_submitter_playwright.py
 
 Author: Alexander Dumas  
-Date: 2025-07-09  
+Last updated: August 2025  
 
 Purpose:
     Automates the submission of heterotrimeric and homotrimeric ANGPTL protein combinations to AlphaFoldServer.com using Playwright.
     The script reads a list of protein combinations (with copy numbers), automatically fills in the form,
-    waits for the model to finish, and downloads the resulting prediction files (.zip). Output files are
+    waits for the model to finish (within a specified wait time), and downloads the resulting prediction files (.zip). Output files are
     renamed for clarity and unzipped into organized folders.
 
 Inputs:
